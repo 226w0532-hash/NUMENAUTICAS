@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inicio Sesión Administrador</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#1d181f,#4d99d8);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    width:90%;
+    max-width:450px;
+    background:#fff;
+    padding:40px 30px;
+    border-radius:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+h1{
+    text-align:center;
+    color:#22134b;
+    margin-bottom:30px;
+    font-size:32px;
+}
+
+form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    outline:none;
+    border-radius:15px;
+    background:#f2f5ff;
+    font-size:15px;
+}
+
+input:focus{
+    border:2px solid #4d99d8;
+}
+
+button{
+    background:#59089b;
+    color:#fff;
+    border:none;
+    padding:15px;
+    border-radius:30px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+button:hover{
+    background:#4d99d8;
+}
+
+.mensaje{
+    text-align:center;
+    margin-top:15px;
+    color:red;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>INICIAR SESIÓN ADMINISTRADOR</h1>
+
+    <form onsubmit="iniciarSesionAdministrador(event)">
+
+        <input 
+            type="email"
+            id="correo"
+            placeholder="Correo electrónico"
+            required
+        >
+
+        <input 
+            type="password"
+            id="password"
+            placeholder="Contraseña"
+            required
+        >
+
+        <button type="submit">
+            Iniciar sesión
+        </button>
+
+    </form>
+
+    <div class="mensaje" id="mensaje"></div>
+
+</div>
+
+<script>
+function iniciarSesionAdministrador(e){
+
+    e.preventDefault();
+
+    const correo = document.getElementById("correo").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if(
+        (correo === "226w0536@zongolica.tecnm.mx" && password === "1234AB") ||
+        (correo === "226w0532@zongolica.tecnm.mx" && password === "Yazriv2144")
+    ){
+
+        window.location.href = "Administrador.html";
+
+    }else{
+
+        document.getElementById("mensaje").innerHTML =
+        "Correo o contraseña incorrectos.";
+
+    }
+
+}
+</script>
+
+</body>
+</html>
