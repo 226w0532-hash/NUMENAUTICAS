@@ -37,7 +37,6 @@ header h1{ color:#22134b; font-size:32px; }
     padding:12px 25px;
     border-radius:30px;
     cursor:pointer;
-    transition:.3s;
 }
 
 .btn-salir:hover{ background:#4d99d8; }
@@ -54,10 +53,7 @@ header h1{ color:#22134b; font-size:32px; }
     padding:30px;
     border-radius:20px;
     box-shadow:0 10px 25px rgba(0,0,0,.2);
-    transition:.3s;
 }
-
-.card:hover{ transform:translateY(-5px); }
 
 .card h2{
     color:#22134b;
@@ -71,17 +67,18 @@ header h1{ color:#22134b; font-size:32px; }
     margin-bottom:20px;
 }
 
-.card button{
+.card button,
+.btn-registrar{
     background:#59089b;
     color:#fff;
     border:none;
     padding:12px 20px;
     border-radius:30px;
     cursor:pointer;
-    transition:.3s;
 }
 
-.card button:hover{ background:#4d99d8; }
+.card button:hover,
+.btn-registrar:hover{ background:#4d99d8; }
 
 .panel-profesores{
     display:none;
@@ -105,7 +102,32 @@ header h1{ color:#22134b; font-size:32px; }
     margin-bottom:30px;
 }
 
-input{
+.formulario-editar{
+    display:none;
+    background:#f2f5ff;
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:30px;
+}
+
+.formulario-editar h3{
+    color:#22134b;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.campo{
+    margin-bottom:15px;
+}
+
+.campo label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:6px;
+    color:#22134b;
+}
+
+input, select{
     width:100%;
     padding:15px;
     border:none;
@@ -115,19 +137,13 @@ input{
     font-size:15px;
 }
 
-input:focus{ border:2px solid #4d99d8; }
-
-.btn-registrar{
-    background:#59089b;
-    color:#fff;
-    border:none;
-    padding:15px;
-    border-radius:30px;
-    cursor:pointer;
-    transition:.3s;
+.formulario-editar input,
+.formulario-editar select{
+    background:#fff;
 }
 
-.btn-registrar:hover{ background:#4d99d8; }
+input:focus,
+select:focus{ border:2px solid #4d99d8; }
 
 table{
     width:100%;
@@ -146,7 +162,29 @@ table td{
     border-bottom:1px solid #ddd;
 }
 
-.btn-eliminar{
+.estado-pendiente{
+    color:#d98200;
+    font-weight:bold;
+}
+
+.estado-verificado{
+    color:green;
+    font-weight:bold;
+}
+
+.btn-editar{
+    background:#0b74d1;
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.btn-editar:hover{ background:#4d99d8; }
+
+.btn-eliminar,
+.btn-cancelar{
     background:#d62828;
     color:#fff;
     border:none;
@@ -155,7 +193,19 @@ table td{
     cursor:pointer;
 }
 
-.btn-eliminar:hover{ background:#ff4d4d; }
+.btn-eliminar:hover,
+.btn-cancelar:hover{ background:#ff4d4d; }
+
+.btn-guardar{
+    background:#198754;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:30px;
+    cursor:pointer;
+}
+
+.btn-guardar:hover{ background:#28a745; }
 
 .mensaje{
     text-align:center;
@@ -180,10 +230,9 @@ table td{
 </header>
 
 <div class="grid">
-
     <div class="card">
         <h2>Profesores</h2>
-        <p>Registrar y administrar profesores del sistema.</p>
+        <p>Registrar profesores.</p>
         <button onclick="abrirProfesores()">Entrar</button>
     </div>
 
@@ -192,7 +241,6 @@ table td{
         <p>Visualizar reportes generales del sistema.</p>
         <button onclick="alert('Sección de reportes en desarrollo')">Entrar</button>
     </div>
-
 </div>
 
 <div class="panel-profesores" id="panelProfesores">
@@ -202,17 +250,53 @@ table td{
     <p class="mensaje" id="mensaje"></p>
 
     <div class="formulario">
-
         <input type="text" id="nombre" placeholder="Nombre del profesor">
-
         <input type="email" id="correo" placeholder="Correo electrónico">
-
-        <input type="password" id="password" placeholder="Contraseña">
+        <input type="password" id="password" placeholder="Contraseña mínimo 6 caracteres">
 
         <button class="btn-registrar" onclick="registrarProfesor()">
             Registrar Profesor
         </button>
+    </div>
 
+    <div class="formulario-editar" id="formularioEditarProfesor">
+        <h3>EDITAR PROFESOR</h3>
+
+        <input type="hidden" id="editarIdProfesor">
+
+        <div class="campo">
+            <label>Nombre del profesor</label>
+            <input type="text" id="editarNombreProfesor" placeholder="Nombre del profesor">
+        </div>
+
+        <div class="campo">
+            <label>Correo electrónico</label>
+            <input type="email" id="editarCorreoProfesor" placeholder="Correo electrónico">
+        </div>
+
+        <div class="campo">
+            <label>Rol</label>
+            <select id="editarRolProfesor">
+                <option value="profesor">Profesor</option>
+                <option value="administrador">Administrador</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Estado del correo</label>
+            <select id="editarEstadoProfesor">
+                <option value="Pendiente">Pendiente</option>
+                <option value="Verificado">Verificado</option>
+            </select>
+        </div>
+
+        <button class="btn-guardar" onclick="guardarEdicionProfesor()">
+            Guardar cambios
+        </button>
+
+        <button class="btn-cancelar" onclick="cancelarEdicionProfesor()">
+            Cancelar
+        </button>
     </div>
 
     <table>
@@ -220,12 +304,18 @@ table td{
             <tr>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Contraseña</th>
-                <th>Eliminar</th>
+                <th>Rol</th>
+                <th>Estado del correo</th>
+                <th>Editar</th>
+                <th>Borrar</th>
             </tr>
         </thead>
 
-        <tbody id="tablaProfesores"></tbody>
+        <tbody id="tablaProfesores">
+            <tr>
+                <td colspan="6">Cargando profesores registrados...</td>
+            </tr>
+        </tbody>
     </table>
 
 </div>
@@ -237,14 +327,22 @@ table td{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 
 import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    sendEmailVerification,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
     getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
     doc,
-    query,
-    where
+    setDoc,
+    collection,
+    getDocs,
+    getDoc,
+    updateDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -258,6 +356,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 window.abrirProfesores = function(){
@@ -267,6 +366,7 @@ window.abrirProfesores = function(){
         panel.style.display = "none";
     }else{
         panel.style.display = "block";
+        mostrarProfesores();
     }
 };
 
@@ -285,25 +385,32 @@ window.registrarProfesor = async function(){
         return;
     }
 
+    if(password.length < 6){
+        mensaje.style.color = "red";
+        mensaje.textContent = "La contraseña debe tener mínimo 6 caracteres.";
+        return;
+    }
+
     try{
 
-        const consulta = query(
-            collection(db, "profesores"),
-            where("correo", "==", correo)
+        const credencial = await createUserWithEmailAndPassword(
+            auth,
+            correo,
+            password
         );
 
-        const resultado = await getDocs(consulta);
+        await updateProfile(credencial.user, {
+            displayName: nombre
+        });
 
-        if(!resultado.empty){
-            mensaje.style.color = "red";
-            mensaje.textContent = "Ese profesor ya existe.";
-            return;
-        }
+        await sendEmailVerification(credencial.user);
 
-        await addDoc(collection(db, "profesores"), {
+        await setDoc(doc(db, "profesores", credencial.user.uid), {
+            uid: credencial.user.uid,
             nombre: nombre,
             correo: correo,
-            password: password,
+            rol: "profesor",
+            estadoCorreo: "Pendiente",
             fechaRegistro: new Date().toLocaleString()
         });
 
@@ -311,23 +418,32 @@ window.registrarProfesor = async function(){
         document.getElementById("correo").value = "";
         document.getElementById("password").value = "";
 
-        mensaje.textContent = "";
+        mensaje.style.color = "green";
+        mensaje.textContent = "Profesor registrado correctamente. Se envió correo de verificación.";
 
         mostrarProfesores();
 
     }catch(error){
 
         mensaje.style.color = "red";
-        mensaje.textContent = "Error al registrar profesor.";
-        console.error(error);
 
+        if(error.code === "auth/email-already-in-use"){
+            mensaje.textContent = "Este correo ya está registrado.";
+        }else if(error.code === "auth/invalid-email"){
+            mensaje.textContent = "Correo electrónico no válido.";
+        }else if(error.code === "auth/weak-password"){
+            mensaje.textContent = "La contraseña es muy débil.";
+        }else{
+            mensaje.textContent = "Error al registrar profesor.";
+        }
+
+        console.error(error);
     }
 };
 
 async function mostrarProfesores(){
 
     const tabla = document.getElementById("tablaProfesores");
-
     tabla.innerHTML = "";
 
     try{
@@ -335,29 +451,40 @@ async function mostrarProfesores(){
         const consulta = await getDocs(collection(db, "profesores"));
 
         if(consulta.empty){
-
             tabla.innerHTML = `
                 <tr>
-                    <td colspan="4">No hay profesores registrados.</td>
+                    <td colspan="6">No hay profesores registrados.</td>
                 </tr>
             `;
-
             return;
         }
 
         consulta.forEach(function(documento){
 
             const profesor = documento.data();
-            const id = documento.id;
+
+            let claseEstado = "estado-pendiente";
+
+            if(profesor.estadoCorreo === "Verificado"){
+                claseEstado = "estado-verificado";
+            }
 
             tabla.innerHTML += `
                 <tr>
-                    <td>${profesor.nombre}</td>
-                    <td>${profesor.correo}</td>
-                    <td>${profesor.password}</td>
+                    <td>${profesor.nombre || "Sin nombre"}</td>
+                    <td>${profesor.correo || "Sin correo"}</td>
+                    <td>${profesor.rol || "profesor"}</td>
+                    <td class="${claseEstado}">
+                        ${profesor.estadoCorreo || "Pendiente"}
+                    </td>
                     <td>
-                        <button class="btn-eliminar" onclick="eliminarProfesor('${id}')">
-                            Eliminar
+                        <button class="btn-editar" onclick="editarProfesor('${documento.id}')">
+                            Editar
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn-eliminar" onclick="eliminarProfesor('${documento.id}')">
+                            Borrar
                         </button>
                     </td>
                 </tr>
@@ -369,44 +496,127 @@ async function mostrarProfesores(){
 
         tabla.innerHTML = `
             <tr>
-                <td colspan="4">Error al cargar profesores.</td>
+                <td colspan="6">Error al cargar profesores registrados.</td>
             </tr>
         `;
 
         console.error(error);
-
     }
 }
 
-window.eliminarProfesor = async function(id){
+window.editarProfesor = async function(id){
 
-    const confirmar = confirm("¿Seguro que deseas eliminar este profesor?");
+    const mensaje = document.getElementById("mensaje");
 
-    if(confirmar){
+    try{
 
-        try{
+        const referencia = doc(db, "profesores", id);
+        const documento = await getDoc(referencia);
 
-            await deleteDoc(doc(db, "profesores", id));
-
-            document.getElementById("mensaje").textContent = "";
-
-            mostrarProfesores();
-
-        }catch(error){
-
-            document.getElementById("mensaje").style.color = "red";
-            document.getElementById("mensaje").textContent =
-            "Error al eliminar profesor.";
-
-            console.error(error);
-
+        if(!documento.exists()){
+            mensaje.style.color = "red";
+            mensaje.textContent = "No se encontró el profesor.";
+            return;
         }
+
+        const profesor = documento.data();
+
+        document.getElementById("formularioEditarProfesor").style.display = "block";
+
+        document.getElementById("editarIdProfesor").value = id;
+        document.getElementById("editarNombreProfesor").value = profesor.nombre || "";
+        document.getElementById("editarCorreoProfesor").value = profesor.correo || "";
+        document.getElementById("editarRolProfesor").value = profesor.rol || "profesor";
+        document.getElementById("editarEstadoProfesor").value = profesor.estadoCorreo || "Pendiente";
+
+        mensaje.textContent = "";
+
+    }catch(error){
+
+        mensaje.style.color = "red";
+        mensaje.textContent = "Error al abrir el formulario de edición.";
+        console.error(error);
 
     }
 };
 
-window.cerrarSesion = function(){
-    window.location.href = "Principal.html";
+window.guardarEdicionProfesor = async function(){
+
+    const id = document.getElementById("editarIdProfesor").value;
+    const nombre = document.getElementById("editarNombreProfesor").value.trim();
+    const correo = document.getElementById("editarCorreoProfesor").value.trim();
+    const rol = document.getElementById("editarRolProfesor").value;
+    const estadoCorreo = document.getElementById("editarEstadoProfesor").value;
+    const mensaje = document.getElementById("mensaje");
+
+    if(nombre === "" || correo === "" || rol === "" || estadoCorreo === ""){
+        mensaje.style.color = "red";
+        mensaje.textContent = "Completa todos los campos antes de guardar.";
+        return;
+    }
+
+    try{
+
+        await updateDoc(doc(db, "profesores", id), {
+            nombre: nombre,
+            correo: correo,
+            rol: rol,
+            estadoCorreo: estadoCorreo,
+            fechaActualizacion: new Date().toLocaleString()
+        });
+
+        mensaje.style.color = "green";
+        mensaje.textContent = "Profesor actualizado correctamente en Firestore.";
+
+        document.getElementById("formularioEditarProfesor").style.display = "none";
+
+        mostrarProfesores();
+
+    }catch(error){
+
+        mensaje.style.color = "red";
+        mensaje.textContent = "Error al guardar los cambios del profesor.";
+        console.error(error);
+
+    }
+};
+
+window.cancelarEdicionProfesor = function(){
+    document.getElementById("formularioEditarProfesor").style.display = "none";
+    document.getElementById("mensaje").textContent = "";
+};
+
+window.eliminarProfesor = async function(id){
+
+    const confirmar = confirm("¿Seguro que deseas borrar este profesor de la tabla?");
+
+    if(!confirmar){
+        return;
+    }
+
+    try{
+
+        await deleteDoc(doc(db, "profesores", id));
+
+        alert("Profesor eliminado de la tabla.");
+        mostrarProfesores();
+
+    }catch(error){
+
+        alert("Error al borrar profesor.");
+        console.error(error);
+
+    }
+};
+
+window.cerrarSesion = async function(){
+    try{
+        await signOut(auth);
+    }catch(error){
+        console.error(error);
+    }
+
+    window.location.href = "index.html";
 };
 
 mostrarProfesores();
